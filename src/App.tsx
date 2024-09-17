@@ -4,6 +4,8 @@ import { generateClient } from "aws-amplify/data";
 import { Authenticator } from "@aws-amplify/ui-react";
 import '@aws-amplify/ui-react/styles.css'
 import { Flex, Tabs } from '@aws-amplify/ui-react';
+import { FileUploader } from '@aws-amplify/ui-react-storage';
+
 
 
 const client = generateClient<Schema>();
@@ -48,7 +50,27 @@ function App() {
                   ))}
                 </ul>
               </Tabs.Panel>
-              <Tabs.Panel value="2">Content of the second tab</Tabs.Panel>
+              <Tabs.Panel value="2">
+                <h2>Upload and View Images</h2>
+                <FileUploader
+                  acceptedFileTypes={['image/*']}
+                  path="media/*"
+                  maxFileCount={4}
+                  isResumable
+                  autoUpload={false}
+                />
+                {uploadedFiles.length > 0 && (
+                  <div>
+                    <h3>Uploaded Images:</h3>
+                    <ul>
+                      {uploadedFiles.map((file, index) => (
+                        <li key={index}>{file}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+              </Tabs.Panel>
               <Tabs.Panel value="3">Content of the third tab</Tabs.Panel>
             </Tabs.Container>
           </Flex>
