@@ -12,6 +12,7 @@ const client = generateClient<Schema>();
 
 function App() {
   const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
+  const [uploadedFiles] = useState<string[]>([]);
 
   useEffect(() => {
     client.models.Todo.observeQuery().subscribe({
