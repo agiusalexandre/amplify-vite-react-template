@@ -1,51 +1,44 @@
-import type { Schema } from "./resource";
-import {
-  BedrockRuntimeClient,
-  InvokeModelCommand,
-  InvokeModelCommandInput,
-} from "@aws-sdk/client-bedrock-runtime";
+export function request(ctx) {
 
-// initialize bedrock runtime client
-const client = new BedrockRuntimeClient();
+  // Define a system prompt to give the model a persona
+  const system =
+    "You are a an expert at crafting a haiku. You are able to craft a haiku out of anything and therefore answer only in haiku.";
 
-export const handler: Schema["generateHaiku"]["functionHandler"] = async (
-  event,
-  context
-) => {
-  // User prompt
-  const prompt = event.arguments.prompt;
+  const prompt = ctx.args.prompt
 
-  // Invoke model
-  const input = {
-    modelId: process.env.MODEL_ID,
-    contentType: "application/json",
-    accept: "application/json",
-    body: JSON.stringify({
-      anthropic_version: "bedrock-2023-05-31",
-      system:
-        "You are a an expert at crafting a haiku. You are able to craft a haiku out of anything and therefore answer only in haiku.",
-      messages: [
-        {
-          role: "user",
-          content: [
-            {
-              type: "text",
-              text: prompt,
-            },
-          ],
-        },
-      ],
-      max_tokens: 1000,
-      temperature: 0.5,
-    }),
-  } as InvokeModelCommandInput;
+  // Construct the HTTP request to invoke the generative AI model
+  return {
+    resourcePath: `/model/${ctx.env.MODEL_ID}/invoke`,
+    method: "POST",
+    params: {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: {
+        anthropic_version: "bedrock-2023-05-31",
+        system,
+        messages: [
+          {
+            role: "user",
+            content: [
+              {
+                type: "text",
+                text: prompt,
+              },
+            ],
+          },
+        ],
+        max_tokens: 1000,
+        temperature: 0.5,
+      },
+    },
+  };
+}
 
-  const command = new InvokeModelCommand(input);
+// Parse the response and return the generated haiku
+export function response(ctx) {
+  const res = JSON.parse(ctx.result.body);
+  const haiku = res.content[0].text;
 
-  const response = await client.send(command);
-
-  // Parse the response and return the generated haiku
-  const data = JSON.parse(Buffer.from(response.body).toString());
-
-  return data.content[0].text;
-};
+  return haiku;
+}
