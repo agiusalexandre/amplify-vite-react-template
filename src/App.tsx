@@ -7,7 +7,6 @@ import { Flex, Tabs } from '@aws-amplify/ui-react';
 import { FileUploader } from '@aws-amplify/ui-react-storage';
 
 
-
 const client = generateClient<Schema>();
 
 function App() {
@@ -39,7 +38,7 @@ function App() {
             <Tabs.Container defaultValue="1">
               <Tabs.List spacing="relative">
                 <Tabs.Item value="1">First</Tabs.Item>
-                <Tabs.Item value="2">This  the second tab</Tabs.Item>
+                <Tabs.Item value="2">Upload Images</Tabs.Item>
                 <Tabs.Item value="3">Really long title for demonstration</Tabs.Item>
               </Tabs.List>
               <Tabs.Panel value="1">
@@ -72,7 +71,10 @@ function App() {
                 )}
 
               </Tabs.Panel>
-              <Tabs.Panel value="3">Content of the third tab</Tabs.Panel>
+              <Tabs.Panel value="3">
+
+                
+              </Tabs.Panel>
             </Tabs.Container>
           </Flex>
 
