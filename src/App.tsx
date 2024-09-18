@@ -5,14 +5,11 @@ import { Authenticator } from "@aws-amplify/ui-react";
 import '@aws-amplify/ui-react/styles.css'
 import { Flex, Tabs } from '@aws-amplify/ui-react';
 import { FileUploader } from '@aws-amplify/ui-react-storage';
-import { Amplify } from "aws-amplify";
 
 
 const client = generateClient<Schema>();
 
-const { data, errors } = await client.queries.generateHaiku({
-  prompt: "Frank Herbert's Dune",
-});
+
 
 function App() {
   const [todos, setTodos] = useState<Array<Schema["Todo"]["type"]>>([]);
@@ -25,7 +22,7 @@ function App() {
     e.preventDefault();
 
     const { data, errors } = await client.queries.generateHaiku({
-      prompt,
+      prompt: "Frank Herbert's Dune",
     });
 
     if (!errors) {
